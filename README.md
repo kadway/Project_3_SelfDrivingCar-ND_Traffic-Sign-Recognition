@@ -152,8 +152,8 @@ I believe the architecture would be relevant for the traffic sign application.
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
 
 The accuracy on the training data was perfect but higher than the validation and test data set. 
-This could show some overfiting but while training the validation accuracy as mostly also increasing during each EPOCH.
-However less than the 20 EPOCHs used would do just fine as it was noticed that the validation accuracy started to converge around the last value after around 10 EPOCHs.
+This could show some overfiting, but while training, the validation accuracy was mostly increasing during each EPOCH.
+However, less than the 20 EPOCHs used would do just fine as it was noticed that the validation accuracy started to converge around the last value after 10 EPOCHs.
 An improvement I could do to prevent overfitting would be to stop training the model just around this time.
 
 ### Test a Model on New Images
@@ -174,8 +174,12 @@ The image with label 7 `Speed limit (100km/h)`, is another example of an image w
 The overall accuracy of the model's  predictions is 54%. Only 6 out of 11 images were correctly predicted.
 That is fairly low compared to the test data set. Some possible reasons for discrepancy were already mentioned above.
 These images found on the internet were also chosen with the intention to see the limitations of the model.
-The amount of images of each class used during training certainly affects the model's predictions. For better flexibility in predicting all the traffic signs the amount of data should have been more uniform, meaning similar amounts of classes in the training data set.
-I also noticed that the distribution of the amount of examples per class were very similar in the training, validation and test data set. This can be a reason for such a discrepance when trying out fewer images found on the web that do not necessarily correspond to the labels found in abundance in these 3 data sets.
+The amount of images of each class used during training certainly affects the model's predictions. 
+For better flexibility in predicting all the traffic signs the amount of training data should have been more uniform, 
+meaning similar amounts of classes in the training data set.
+I also noticed that the amount of examples per class were very similar in the training, validation and test data set. 
+This can be a reason for such a discrepancy when trying out fewer images found on the web that do not necessarily correspond to the labels found in abundance in those 3 data sets.
+Worth to mention that the total accuracy of the test data is an average of all the predictions for each batch of images, so I believe that with more images from the internet, and them being in a similar amount per class as in the test data set, a similar accuracy could be obtained. 
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
