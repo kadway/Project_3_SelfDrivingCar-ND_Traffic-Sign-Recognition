@@ -74,39 +74,74 @@ My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 Grayscale normalized image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
+| Input         		| 32x32x1 Grayscale normalized image   			| 
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x100 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+| Max pooling	      	| 2x2 stride 2x2 kernel, outputs 14x14x100 		|
+| Convolution 5x5	    | 1x1 stride, valid padding, outputs 10x10x200  |    									
+| RELU                  |                                               |
+| Max pooling	      	| 2x2 stride 2x2 kernel, outputs 5x5x200 		|
+| Convolution 1x1	    | 1x1 stride, valid padding, outputs 5x5x300    | 
+| RELU                  |                                               |   
+| Max pooling	      	| 2x2 stride 2x2 kernel, outputs 2x2x300        |
+| Flattening            | output 1200		                            |
+| Fully connected 1		| output 200    								|
+| RELU                  |                                               |
+| Dropout               | keep probability 50%                          |
+| Fully connected 2		| output 43       					            |
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+To train the model, the following set of hyperparameters gave a reasonable good validation accuracy.
+I used a batch size of 100, Learning Rate 0.0009, L2_regularization weight of 1e-06, keep probability of 0.5 and 20 EPOCHs.
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 1.00
+* validation set accuracy of 0.969
+* test set accuracy of 0.961
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
+
+**The first architecture used was LeNet provided from Udacity lessons. It helped to get an understanding
+of how to train the model by adjusting the hyperparameters.**
+
 * What were some problems with the initial architecture?
+
+**The initial architecture was not producing a validation accuracy higher than 93%, even after much tweeking of the hyperparameters.**
+
 * How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
+
+In order to improve accuracy I started to extend the model with one more convolution layer after the existing 2 and then experiment with the sizes of the filters for each layer.
+The result was clearly visible and the accuracy was increasing much. But the learning process was never improving much more and stopping around 94% and the model was now much more slow to learn.
+I decided to try and remove the last fully connected layer which reduced the the model size speeding up the learning process. 
+The accuracy did not change that much and it was still possible to get around 94% accuracy after tweeking one more time the size of the layers.
+To try and increase the accuracy past 94% I added a dropout layer after the first fully connected layer and also added an L2 regularization to my loss function. 
+
 * Which parameters were tuned? How were they adjusted and why?
+
+The learning rate and batch size were the first parameters to be adjusted. I went for a slower learning rate and it provided better end results as compared to a higher learning rate.
+The batch size was also adjusted and it seems that when too high or too low it would reduce the accuracy considerably. I started with a batch of 128 and did variations of batches above and bellow this number, end up with a batch of 100.
+The dropout layer was tested with different keep probabilities and at 50% was found to be improving the validation accuracy.
+By adding this layer I also prevent over-fitting the model because it can never be sure to "memorize" very specific features from the training set, making it more flexible to predict on real world features.
+The L2 factor was also played with and mostly it was making the accuracy worst when the factor was between 0.1 and 1e-05.
+At 1e-06 I noticed that the accuracy was back to the values before applying L2.
+But additionally the model was more stable while learning, the accuracy would increase with each epoch but not too much at a time.
+Before L2 it would happen that the accuracy would increase considerably in one epoch but in the next epoch it would also decrease a fair amount showing that after a certain accuracy value 93%-94%, the learning was not linearly increasing as desired.
+So L2 seems to have contributed, even if only a little, to penalise the heavier weights in the model and make the learning smoother and more linear when close to the achieved accuracy limit. 
+
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
 
-If a well known architecture was chosen:
-* What architecture was chosen?
+Using convolution as the first layers is important because it looks at the input and does not destroy the spacial data. 
+It is also less expensive to compute and requires less memory as compared to the fully connected layers.
+In each convolutional layer the weights and bias are shared and each patch of pixels connects to a neuron in the next layer.
+Each patch will connect to n neuron in the next layer defined by the filter depth.
+
 * Why did you believe it would be relevant to the traffic sign application?
+
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
  
 
@@ -114,10 +149,17 @@ If a well known architecture was chosen:
 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are the German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image4] 
+
+bla bla 
+![alt text][image5] 
+
+bla bla
+![alt text][image6]
+
+
 
 The first image might be difficult to classify because ...
 
