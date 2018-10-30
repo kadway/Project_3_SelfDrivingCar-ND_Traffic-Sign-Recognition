@@ -103,15 +103,14 @@ My final model results were:
 * validation set accuracy of 0.969
 * test set accuracy of 0.961
 
-If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
 
-**The first architecture used was LeNet provided from Udacity lessons. It helped to get an understanding
-of how to train the model by adjusting the hyperparameters.**
+The first architecture used was LeNet provided from Udacity lessons. It helped to get an understanding
+of how to train the model by adjusting the hyperparameters.
 
 * What were some problems with the initial architecture?
 
-**The initial architecture was not producing a validation accuracy higher than 93%, even after much tweeking of the hyperparameters.**
+The initial architecture was not producing a validation accuracy higher than 93%, even after much tweeking of the hyperparameters.
 
 * How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
 
@@ -135,15 +134,27 @@ So L2 seems to have contributed, even if only a little, to penalise the heavier 
 
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
 
-Using convolution as the first layers is important because it looks at the input and does not destroy the spacial data. 
+Using convolution in the first layers is important because it does not destroy the spacial data of the image. 
 It is also less expensive to compute and requires less memory as compared to the fully connected layers.
-In each convolutional layer the weights and bias are shared and each patch of pixels connects to a neuron in the next layer.
-Each patch will connect to n neuron in the next layer defined by the filter depth.
+In each convolutional layer the weights and biases are shared and each patch of pixels connects to a neuron in the next layer.
+Each patch will connect to n neurons in the next layer defined by the filter depth.
+Another choice was to increase the depth of the filters along each convolution layer.
+Each filter may detect different features and in the end it showed better results as compared to having the same amount of filters in every convolution layer.
+For the fully connected layer the choice was the opposite, to reduce the size after flattening, 
+because the fully connected layers are more expensive to compute because they have much more parameters and could lead to overfitting the model.
 
 * Why did you believe it would be relevant to the traffic sign application?
 
+Given that the accuracy is good on the test data set and the prediction can be done fairly fast once the model is trained, 
+I believe the architecture would be relevant for the traffic sign application.
+
+
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+
+The accuracy on the training data was perfect but higher than the validation and test data set. 
+This could show some overfiting but while training the validation accuracy as mostly also increasing during each EPOCH.
+However less than the 20 EPOCHs used would do just fine as it was noticed that the validation accuracy started to converge around the last value after around 10 EPOCHs.
+An improvement I could do to prevent overfitting would be to stop training the model just around this time.
 
 ### Test a Model on New Images
 
@@ -153,55 +164,34 @@ Here are the German traffic signs that I found on the web:
 
 ![alt text][image4] 
 
-bla bla 
-![alt text][image5] 
 
-bla bla
-![alt text][image6]
-
-
-
-The first image might be difficult to classify because ...
+The image with label 26 `Traffic signals`, might be difficult to classify because some important features to identify it are the red, yellow and green colors, and this information was lost after converting the images to grayscale.
+The image with label 19 `Dangerous curve to the left`, might also be difficult to identify because the traffic sign is very small in the center of the image and there are other shapes in the background that may "trick" the model into looking at features of the image that are not part of the sign.
+The image with label 7 `Speed limit (100km/h)`, is another example of an image where the background may be confusing the model's prediction, furthermore the the sign appears a bit warped which can also complicate the prediction.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
-Here are the results of the prediction:
-
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
-
-
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The overall accuracy of the model's  predictions is 54%. Only 6 out of 11 images were correctly predicted.
+That is fairly low compared to the test data set. Some possible reasons for discrepancy were already mentioned above.
+These images found on the internet were also chosen with the intention to see the limitations of the model.
+The amount of images of each class used during training certainly affects the model's predictions. For better flexibility in predicting all the traffic signs the amount of data should have been more uniform, meaning similar amounts of classes in the training data set.
+I also noticed that the distribution of the amount of examples per class were very similar in the training, validation and test data set. This can be a reason for such a discrepance when trying out fewer images found on the web that do not necessarily correspond to the labels found in abundance in these 3 data sets.
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+Bellow is shown the predictions done for each of the traffic signs found on the internet.
+Also the top 5 softmax probabilities for each sign.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+![alt text][image5] 
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+Here is an histogram of the training data set with the highlighted labels of the input traffic signs found on the internet:
 
+![alt text][image6]
 
-For the second image ... 
-
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
-
-
-
-generation of Additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
+We can see in red in the histogram, the wrongly classified sign labels and in green the correct ones.
+The first thought would be that the higher the amount of images of the respective class in the training dataset, the higher the prediction for that class.
+This does not always verify. Two of the wrongly classified traffic siWogns have a reasonable good amount of training data examples and even though were not correctly classified.
+Some of the possible reasons were already mentioned above.
+With regards to the other incorrect predictions (labels 6, 19 and 26), my believe is that the model had very few training examples of these classes as compared to the other classes with high amount of examples. 
+Worth to mention is the fact that labels 0, 30 and 4, were correctly classified although there were very few examples of them in the training data set.
+One possible explanation is that the input images are clear and similar to the ones in the training set, also with not many complicated features which makes them easier to learn.
